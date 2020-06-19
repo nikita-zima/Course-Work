@@ -1,85 +1,91 @@
 #pragma once
-#include"TourGroup.h"
 using namespace std;
-class Tourist: virtual public TourGroup
+class Tourist
 {
 public:
-	void setNew(const FullName& name,const int& age,const string& gender,const Date& start,const Date& finish,const vector<string>& interests)
+	Tourist()
 	{
-		basic_name = name;
-		default_age = age;
-		default_gender = gender;
-		to_start = start;
-		to_finish = finish;
-		default_intersest = interests;
+		basic_name = { "","","" };
+		default_age = 0;
+		default_gender = "";
+		to_start = { 0,0,0 };
+		to_finish = { 0,0,0 };
 	}
-	void Edit(vector<Tourist>& basic,const FullName& name)
-	{
-		string var;
-		for (auto i : basic) {
-			if (i.basic_name == name)
-			{
-				cout << "Name is " << i.basic_name<<endl;
-				cout << "Age is " << i.default_age<<endl;
-				cout << "Gender is " << i.default_gender<<endl;
-				cout << "Want start trip at " << i.to_start<<endl;
-				cout << "Want end trip at " << i.to_finish<<endl;
-				cout << "His ineterests are:" <<i.default_intersest<< endl;
-				while (var != "Stop")
-				{
-					cout << "Enter type of information you want to edit(Age, Gender,Date,Interests)\n";
-					cout << "Write 'Stop' to stop\n";
-					cin >> var;
-					if (var == "Age") {
-						int new_age;
-						cout << "Enter new age: ";
-						cin >> new_age;
-						i.default_age = new_age;
-					}
-					if (var == "Gender")
-					{
-						string gender;
-						cout << "Enter new gender: ";
-						do {
-							cin >> gender;
-							if (gender != "male" && gender != "female")
-							{
-								cout << "Unknown gender, please try again\n";
-							}
-						} while (gender != "male" && gender != "female");
-						i.default_gender = gender;
-					}
-					if (var == "Date")
-					{
-						Date new_start, new_finish;
-						cout << "New to start trip date: ";
-						do {
-							cin >> new_start.day >> new_start.month >> new_start.year;
-							cout << endl << "New to finish trip date: ";
-							cin >> new_finish.day >> new_finish.month >> new_finish.year;
-							if (new_finish < new_start)
-							{
-								cout << "Please input start trip date at first\n";
-							}
-						} while (new_finish < new_start);
-						i.to_start = new_start;
-						i.to_finish = new_finish;
-					}
-					if (var == "Interests")
-					{
-						vector<string> new_vec;
-						string new_inter;
-						cout << "Enter new interests('Stop' to stop): ";
-						while (new_inter != "Stop")
-						{
-							cin >> new_inter;
-							new_vec.push_back(new_inter);
-						}
-						i.default_intersest = new_vec;
-					}
-				}
-			}
+	Tourist(const FullName& name, const int& age, const string& gender) : basic_name(name), default_age(age),
+		default_gender(gender){
+	}
+	bool SetPlace() {
+		default_intersest->getInfo();
+		default_intersest->Input();
+		string s;
+		cin >> s;
+		if (default_intersest->CheckThePlace(s))
+		{
+			place = s;
+			return true;
 		}
+		else
+			cout << "Your input is invalid\n";
+		return false;
+	}
+	void SetDateForEmpty(int plus_date) {
+
+		Date date;
+		cout << "\nInput date , when you want to go there\nday->month->year\n";
+		cin >> date.day >> date.month >> date.year;
+		to_start = date;
+		Date new_date = { date.day + plus_date , date.month,date.year };
+		to_finish = new_date;
+		cout << " \nYou go there " << date << " and back - " << new_date << endl;
+	}
+	void SetDate(pair<Date, Date> s_date) {
+
+		to_start = s_date.first;
+		to_finish = s_date.second;
+	}
+	pair<Date, Date> GetDate() {
+		return make_pair(to_start, to_finish);
+	}
+	bool CheckThePLace(string s) {
+		return  default_intersest->CheckThePlace(s);
+	}
+	string GetPLace() {
+		return place;
+	}
+	void PrintInfoAboutTrip() {
+		cout << "That's " << getName() << " who is " << GetAge() << "\nInteres - " << getInterests() << " and goes to " << GetPLace() << " for " << getDurationOfHisweekends() << " days :  \nFrom " << GetDate().first << " to " << GetDate().second << endl;
+	}
+	int getDurationOfHisweekends() {
+
+		return default_intersest->GetDuration();
+	}
+	void SetInterest(const  string& str) {
+
+		if (str == "Mountaineering") {
+
+			default_intersest = make_shared<Mountaineering>();
+		}
+		else if (str == "Hike") {
+
+			default_intersest = make_shared<Hike>();
+		}
+		else if (str == "Kayaking") {
+
+			default_intersest = make_shared<Kayaking>();
+		}
+		else if (str == "Diving") {
+
+			default_intersest = make_shared<Diving>();
+		}
+	}
+	virtual bool isGuide() {
+		return false;
+	}
+	void SetAge(int age) {
+		default_age = age;
+	}
+	const int GetAge()const {
+		return default_age;
 	}
 	Date getStartDate()
 	{
@@ -89,16 +95,43 @@ public:
 	{
 		return to_finish;
 	}
-	vector<string> getInterests()
+	string getInterests()//формируем по этому критерию группу
 	{
-		return default_intersest;
+		return default_intersest->GetType();
 	}
-private:
+	FullName getName()
+	{
+		return basic_name;
+	}
+	void setName()
+	{
+		cout << "Enter name(surname,name,patronymic)\n";
+		FullName name;
+		cin >> name.surname >> name.name >> name.patronymic;
+		basic_name = name;
+	}
+	void setAge()
+	{
+		cout << "Enter new age\n";
+		int age;
+		cin >> age;
+		default_age = age;
+	}
+	void setGender()
+	{
+		cout << "Input gender 'male' or 'female'\n";
+		string gender;
+		cin >> gender;
+		default_gender = gender;
+	}
+protected:
 	FullName basic_name;
 	int default_age;
 	string default_gender;
 	Date to_start;
 	Date to_finish;
-	vector<string> default_intersest;
+private:
+	shared_ptr <Activities> default_intersest;
+	string place;
 };
 

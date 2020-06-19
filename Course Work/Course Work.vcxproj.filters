@@ -23,13 +23,16 @@
     <ClInclude Include="Tourist.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Trip.h">
+    <ClInclude Include="TravelAgency.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="TourLeader.h">
+    <ClInclude Include="Activitie.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="TourGroup.h">
+    <ClInclude Include="Group.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Guide.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

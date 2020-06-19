@@ -150,10 +150,11 @@
     <ClCompile Include="Course Work.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TourGroup.h" />
+    <ClInclude Include="Group.h" />
     <ClInclude Include="Tourist.h" />
-    <ClInclude Include="TourLeader.h" />
-    <ClInclude Include="Trip.h" />
+    <ClInclude Include="Guide.h" />
+    <ClInclude Include="Activitie.h" />
+    <ClInclude Include="TravelAgency.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
