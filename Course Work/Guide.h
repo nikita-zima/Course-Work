@@ -2,28 +2,33 @@
 class Guide : public Tourist {
 public:
 	Guide() :Tourist() {}
-	Guide(const FullName& name, const int& age, const string& gender, string skill) :Tourist(name, age, gender), isInExpedition(false) {
-		if (skill == "legs")
+	Guide(const FullName& name, const int& age, const string& gender, string skill) :Tourist(name, age, gender) {
+		if (skill == "body")
 		{
-			skills.first = make_shared<Mountaineering>();
-			skills.second = make_shared<Hike>();
-
+			this->skill = make_shared<Mountaineering>();
 		}
-		else
+		else if (skill == "maps")
 		{
-			skills.first = make_shared<Kayaking>();
-			skills.second = make_shared<Diving>();
+			this->skill = make_shared<Hike>();
 		}
-		cout << "\nOh you are expert in " << GetSkills().first << " and " << GetSkills().second << endl;
+		else if (skill == "arms")
+		{
+			this->skill = make_shared<Kayaking>();
+		}
+		else if (skill == "dive")
+		{
+			this->skill = make_shared<Diving>();
+		}
+		cout << "\nYou are owr new guide in: " << printSkill() << endl;
 	}
-
-	bool isGuide()override {
-		return true;
+	shared_ptr<Activities> getSkill() const
+	{
+		return this->skill;
 	}
-	virtual pair<string, string> GetSkills() {
-		return make_pair(skills.first->GetType(), skills.second->GetType());
+	string printSkill()
+	{
+		return this->skill->GetType();
 	}
 private:
-	bool isInExpedition;
-	pair< shared_ptr <Activities>, shared_ptr <Activities>> skills;
+	shared_ptr <Activities> skill;
 };

@@ -23,9 +23,6 @@
     <ClInclude Include="Tourist.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="TravelAgency.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="Activitie.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -33,6 +30,12 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Guide.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Date.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Fullname.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

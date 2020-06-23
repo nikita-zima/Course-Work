@@ -7,40 +7,6 @@
 #include<memory>
 #include<iomanip>
 using namespace std;
-struct Date {
-	int day;
-	int month;
-	int year;
-};
-struct FullName
-{
-	string surname;
-	string name;
-	string patronymic;
-};
-bool operator ==(const Date& lhs, const Date& rhs)
-{
-	if (lhs.day == rhs.day)
-		if (lhs.month == rhs.month)
-			if (lhs.year == rhs.year)
-				return true;
-}
-bool operator<(const Date& lhs, const Date& rhs)
-{
-	return tie(lhs.year, lhs.month, lhs.day) <
-		tie(rhs.year, rhs.month, rhs.day);
-}
-bool operator==(const FullName& lhs, const FullName& rhs)
-{
-	if (lhs.name == rhs.name) {
-		if (lhs.surname == rhs.surname) {
-			if (lhs.patronymic == rhs.patronymic)
-			{
-				return true;
-			}
-		}
-	}
-}
 template<typename T>
 ostream& operator<<(ostream& out, const set<T>& s)
 {
@@ -49,17 +15,6 @@ ostream& operator<<(ostream& out, const set<T>& s)
 		out << i << "\n";
 	}
 	return out;
-}
-
-
-ostream& operator<<(ostream& out, const Date& to_out)
-{
-	return out << to_out.day << "." << to_out.month << "." << to_out.year;
-}
-
-ostream& operator<<(ostream& out, const FullName& to_out)
-{
-	return out << to_out.surname << " " << to_out.name << " " << to_out.patronymic;
 }
 template <typename C>
 ostream& operator<<(ostream& out, const vector<C>& to_out)
@@ -70,200 +25,219 @@ ostream& operator<<(ostream& out, const vector<C>& to_out)
 	}
 	return out;
 }
+#include"Date.h"
+#include"Fullname.h"
 #include"Activitie.h"
 #include"Tourist.h"
 #include"Guide.h"
 #include"Group.h"
-#include"TravelAgency.h"
+using namespace std;
 
-
-//	vector<Tourist*>all_tourists;
-Group Mounte("Mountaineering", { 1,1,2020 }, { 10,1,2020 }, { 1,5,2020 }, { 10,5,2020 });
-Group Divi("Diving", { 20, 3, 2020 }, { 25,3,2020 }, { 20,8,2020 }, { 25,8,2020 });
-Group KA("Kayaking", { 1, 1, 2020 }, { 10,1,2020 }, { 1,5,2020 }, { 10,5,2020 });
-Group Hi("Hike", { 7, 2, 2020 }, { 9,2,2020 }, { 13,10,2020 }, { 15,10,2020 });
-vector<Group>gr = { Mounte,Divi, KA,Hi };
-
-
-void AddtoVEctorByInterest(const string& s, Tourist& tour) {
-	if (s == "Mountaineering") {
-		gr[0].AddtoGroup(tour);
+void PrintAll(const vector<shared_ptr<Tourist>>& all)
+{
+	cout << "All tourists in our base\n";
+	for (auto i : all)
+	{
+		for (int i = 0; i < 50; i++)
+		{
+			cout << '-';
+		}
+		cout << endl;
+		cout << "Name is " << i->getName() << endl;
+		cout << "Age is " << i->GetAge() << endl;
+		cout << "Gender is " << i->getGender() << endl;
+		cout << "Can start trip at " << i->getStartDate() << " and finish " << i->getFinishDate() << endl;
+		cout << "Interests are: \n"; i->getInterests(); cout << endl;
+		for (int i = 0; i < 50; i++)
+		{
+			cout << '-';
+		}
+		cout << endl;
 	}
-	else if (s == "Diving") {
-		gr[1].AddtoGroup(tour);
-	}
-	else if (s == "Kayaking") {
-		gr[2].AddtoGroup(tour);
-	}
-	else if (s == "Hike") {
-		gr[3].AddtoGroup(tour);
+}
+void PrintGuide(const vector<Guide>& guides)
+{
+	for (auto i : guides)
+	{
+		for (int i = 0; i < 50; i++)
+		{
+			cout << '-';
+		}
+		cout << endl;
+		cout << "Guide name is " << i.getName() << endl;
+		cout << "Age is " << i.GetAge() << endl;
+		cout << "Gender is " << i.getGender() << endl;
+		cout << "Can guide trips in \n" << i.printSkill() << endl;
+		for (int i = 0; i < 50; i++)
+		{
+			cout << '-';
+		}
+		cout << endl;
 	}
 }
 void MenuFunction()
 {
 	cout << "Enter '0' to exit the program\n";
-	cout << "Enter '1' to hire new guides\n";
-	cout << "Enter '2' to input information about tourists\n";
-	cout << "Enter '3' to create new group\n";
+	cout << "Enter '1' to add new tourist\n";
+	cout << "Enter '2' to watch information about all toursist\n";
+	cout << "Enter '3' to hire a new guide\n";
+	cout << "Enter '4' to watch all information about guides\n";
+	cout << "Enter '5' to create a new group\n";
+	cout << "Enter '6' to watch information about group\n";
 }
-vector<Guide>v_g;
 int main() {
-	cout << "Welcome to the program!\n";
-	cout << "First of all you need to hire new guides\n";
-	int var;
-	do {
+	vector<shared_ptr<Tourist>> all;
+	vector<Guide> guides;
+	Group new_group;
+	int com;
+	while (true)
+	{
 		MenuFunction();
-		cin >> var;
-		if (var == 0)
+		cin >> com;
+		if (com == 0)
 		{
-			cout << "Have a nice day\n";
+			cout << "Thank you, have a nice day!\n";
 			break;
 		}
-		if (var == 1) {
-			cout << "Hiring guides : \n";//добрый день , босс , нам нужно нанять гидов , сколько мы можем ввести
-			cout << "Inpur amount of guides , that you can take\n";
-			int in;
-			cin >> in;
-			Guide new_one;
-			for (int i = 0; i < in; i++) {
-				cout << "Input guide fullname\n";
-				cout << "name->patromunic->surname\n";
-				FullName name;
-				cin >> name.name >> name.patronymic >> name.surname;
-				cout << "Then age\n";
-				int age;
-				do {
-					cin >> age;
-					if (age < 10)
-					{
-						cout << "Sorry, but guide have not enough experiense\n";
-					}
-					else if (age > 80)
-					{
-						cout << "Sorry, guide is too old\n";
-						cout << "Eneter new age\n";
-					}
-				} while (age > 80 || age < 20);
-				cout << "And now fender(male or female)\n";
-				string gender;
-				do {
-					cin >> gender;
-					if (gender != "male" && gender != "female")
-					{
-						cout << "Unknown gender, please try again\n";
-					}
-				} while (gender != "male" && gender != "female");
-				cout << " Input your best bodypart : \n";
-				string s_in;
-				cin >> s_in;
-				new_one = Guide(name, age, gender, s_in);
-				v_g.push_back(new_one);
-				cout << "size  - " << v_g.size() << endl;
-			}
-		}
-		if (var == 2) {
-			Tourist tt;
-			string command;
-			cout << "Now let`s add tourist if they interested in our agency\n";
+		else if (com == 1)
+		{
+			string var;
 			do {
-				cout << "Enter 'Add' to add new toursit and 'Stop' to stop\n";
-				cin >> command;
-				if (command == "Add") {
-					cout << "There are 4 types of holidays here : \n1.Mountaineering\n2.Diving\n3.Kayaking\n4.Hike\n";
-					int n;
-					cin >> n;
-					string input;
-					switch (n)
-					{
-					case 1:
-						input = "Mountaineering";
-						break;
-					case 2:
-						input = "Diving";
-						break;
-					case 3:
-						input = "Kayaking";
-						break;
-					case 4:
-						input = "Hike";
-						break;
-
-					default:
-						break;
-					}
-					cout << "Enter tourist full name\n";
-					cout << "name->patronymic->surname\n";
+				cout << "Enter 'Add' to add new tourist, enter 'Stop' to stop\n";
+				cin >> var;
+				if (var == "Add")
+				{
+					cout << "Please enter tourist full name\n";
+					cout << "Name->surname->patronymic\n";
 					FullName name;
-					cin >> name.name >> name.patronymic >> name.surname;
-					cout << "Enter his age\n";
+					cin >> name.name >> name.surname >> name.patronymic;
+					cout << "Then age\n";
 					int age;
-					do {
-						cin >> age;
-						if (age > 80)
-						{
-							cout << "We are sorry, but person is too old for active trips\n";
-						}
-						else if (age < 10)
-						{
-							cout << "We are sorry, but person is too young\n";
-						}
-					} while (age > 80 || age < 10);
+					cin >> age;
+					cout << " Next eneter gender(male or female)\n";
 					string gender;
-					cout << "And now gender(male or female)\n";
 					do {
 						cin >> gender;
 						if (gender != "male" && gender != "female")
 						{
-							cout << "Unkbown gender, please try again\n";
+							cout << "Unknown gender, please try again\n";
 						}
 					} while (gender != "male" && gender != "female");
-					Tourist tour(name, age, gender);
-					tt = tour;
-					tt.SetInterest(input);
-					if (tt.SetPlace())
+					vector<int> inter_num;
+					int q;
+					while (true)
 					{
-						for (auto i : gr)
+						cout << "Next let`s add tourist`s interests\n";
+						cout << "Enter '0' stop, '1' to add Mountaineering, '2' to add Kayaking, 3 to add Hike,4 to add Diving\n";
+						cin >> q;
+						if (q == 0)
 						{
-							if (tt.getInterests() == i.getNick())
-							{
-								cout << "Chose date that is good for you : \n";
-								i.PrintSrokes();
-								int x;
-								cin >> x;
-								tt.SetDate(i.GetDatesByIdx(x));
-								tt.PrintInfoAboutTrip();
-								cout << endl;
-							}
+							break;
 						}
-						AddtoVEctorByInterest(tt.getInterests(), tt);
+						else {
+							inter_num.push_back(q);
+						}
 					}
-					else {
-						cout << "\nWe can't find  any trip for you\n";
-					}
-					for (auto i : gr) {
-						i.CheckTheGroup();
-					}
+					Date start, finish;
+					cout << "And finally enter date when tourist plan to start trip\n";
+					cout << "day->month->year\n";
+					cin >> start.day >> start.month >> start.year;
+					cout << "And finish date\n";
+					cout << "day->month->year\n";
+					cin >> finish.day >> finish.month >> finish.year;
+					Tourist tour(name, age, gender, start, finish);
+					tour.SetInterest(inter_num);
+					all.push_back(make_shared<Tourist>(tour));
 				}
-				else if (command == "Stop")
+				else
+				{
+					cout << "Wrong command, please try again\n";
+				}
+			} while (var != "Stop");
+		}
+		else if (com == 2)
+		{
+			PrintAll(all);
+		}
+		else if (com == 3)
+		{
+			string var;
+			while (true)
+			{
+				cout << "Write 'Add' to add new guide, write 'Stop' to stop\n";
+				cin >> var;
+				if (var == "Add")
+				{
+					cout << "Enter guide full name\n";
+					cout << "name->surname->patronymic\n";
+					FullName name;
+					cin >> name.name >> name.surname >> name.patronymic;
+					cout << "Eneter his age\n";
+					int age;
+					cin >> age;
+					cout << "Enter guiides gender\n";
+					string gender;
+					do {
+						cin >> gender;
+						if (gender != "male" && gender != "female")
+						{
+							cout << "Unknown gender, please try again\n";
+						}
+					} while (gender != "male" && gender != "female");
+					cout << "Your skill is(body,maps,arms,dive)\n";
+					string skill;
+					cin >> skill;
+					Guide guide(name, age, gender, skill);
+					guides.push_back(guide);
+
+				}
+				else if (var == "Stop")
 				{
 					break;
 				}
 				else
 				{
-					cout << "Invalid data, please try again\n";
+					cout << "Wrong command,please try again\n";
 				}
-			} while (command != "Stop");
-		}
-		if (var == 3)
-		{
-			gr[0].SetPLaceofTrip();
-			cout << "Most of people desided to go to: \n";
-			for (auto i : gr)
-			{
-				i.CheckTheGroup();
 			}
 		}
-	}while (var != 1 || var != 2||var!=3);
+		else if (com == 4)
+		{
+			PrintGuide(guides);
+		}
+		else if (com == 5)
+		{
+			cout << "Enter which type of trip you want to held(Mountaineering, Kayaking,Hike,Diving)\n";
+			string var;
+			cin >> var;
+			if (var == "Mountaineering")
+			{
+				new_group.makeGroup(make_shared<Mountaineering>(), all, guides);
+			}
+			else if (var == "Kayaking")
+			{
+				new_group.makeGroup(make_shared<Kayaking>(), all, guides);
+			}
+			else if (var == "Hike")
+			{
+				new_group.makeGroup(make_shared<Hike>(), all, guides);
+			}
+			else if (var == "Diving")
+			{
+				new_group.makeGroup(make_shared<Diving>(), all, guides);
+			}
+			else {
+				cout << "Wrong type, please try again\n";
+			}
+		}
+		else if (com == 6)
+		{
+			new_group.PrintGroup();
+		}
+		else
+		{
+			cout << "Wrong data please try again\n";
+		}
+	}
 	return 0;
-	//придумать минимум и максимум с которым те или ииные отправляются в походы
 }
