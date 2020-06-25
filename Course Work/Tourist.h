@@ -44,6 +44,19 @@ public:
 	void SetAge(int age) {
 		this->age = age;
 	}
+	void setNewDates(Date start, Date finish)
+	{
+		this->to_start = start;
+		this->to_finish = finish;
+	}
+	void setGender(string gender)
+	{
+		this->gender = gender;
+	}
+	void setName(FullName name)
+	{
+		this->name = name;
+	}
 	const int GetAge()const {
 		return age;
 	}

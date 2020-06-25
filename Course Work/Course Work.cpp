@@ -78,12 +78,89 @@ void PrintGuide(const vector<Guide>& guides)
 void MenuFunction()
 {
 	cout << "Enter '0' to exit the program\n";
-	cout << "Enter '1' to add new tourist\n";
-	cout << "Enter '2' to watch information about all toursist\n";
-	cout << "Enter '3' to hire a new guide\n";
-	cout << "Enter '4' to watch all information about guides\n";
-	cout << "Enter '5' to create a new group\n";
-	cout << "Enter '6' to watch information about group\n";
+	cout << "Enter '1' to watch informtion about possible trips\n";
+	cout << "Enter '2' to add new tourist\n";
+	cout << "Enter '3' to watch information about all toursist\n";
+	cout << "Enter '4' to hire a new guide\n";
+	cout << "Enter '5' to watch all information about guides\n";
+	cout << "Enter '6' to create a new group\n";
+	cout << "Enter '7' to watch information about group\n";
+	cout << "Enter '8' to change information about tourist by name\n";
+}
+void info()
+{
+	cout << "Information about our agency trips\n";
+	Mountaineering mount;
+	mount.getInfo();
+	cout << endl;
+	Kayaking k;
+	k.getInfo();
+	cout << endl;
+	Diving d;
+	d.getInfo();
+	cout << endl;
+	Hike h;
+	h.getInfo();
+	cout << endl;
+}
+void Changebyname(vector<shared_ptr<Tourist>>& all,const FullName& find)
+{
+	string var;
+	for (auto& i : all)
+	{
+		if (i->getName() == find)
+		{
+			cout << "What you want to change(Age,Name,Dates, Gender)\n";
+			cin >> var;
+			while (true)
+			{
+				if (var == "Age")
+				{
+					cout << "Enter new age\n";
+					int age;
+					cin >> age;
+					i->SetAge(age);
+					break;
+				}
+				else if (var == "Name")
+				{
+					FullName name;
+					cout << "Enter new name\n";
+					cout << "name->surname->patronymic\n";
+					cin >> name.name >> name.surname >> name.patronymic;
+					i->setName(name);
+					break;
+				}
+				else if (var == "Dates")
+				{
+					Date start, finish;
+					cout << "Enter new start and finish dates\n";
+					cout << "Start\n";
+					cin >> start.day >> start.month >> start.year;
+					cout << "Finish\n";
+					cin >> finish.day >> finish.month >> finish.year;
+					i->setNewDates(start, finish);
+					break;
+				}
+				else if(var=="Gender")
+				{ 
+					string gender;
+					do {
+						cin >> gender;
+						if (gender != "male" && gender != "female")
+						{
+							cout << "Unknown data,please try again\n";
+						}
+					} while (gender != "male" && gender != "female");
+					i->setGender(gender);
+					break;
+				}
+				else {
+					cout << "Wrong command please try again\n";
+				}
+			}
+		}
+	}
 }
 int main() {
 	vector<shared_ptr<Tourist>> all;
@@ -100,6 +177,10 @@ int main() {
 			break;
 		}
 		else if (com == 1)
+		{
+			info();
+		}
+		else if (com == 2)
 		{
 			string var;
 			do {
@@ -155,11 +236,11 @@ int main() {
 				}
 			} while (var != "Stop");
 		}
-		else if (com == 2)
+		else if (com == 3)
 		{
 			PrintAll(all);
 		}
-		else if (com == 3)
+		else if (com == 4)
 		{
 			string var;
 			while (true)
@@ -201,11 +282,11 @@ int main() {
 				}
 			}
 		}
-		else if (com == 4)
+		else if (com == 5)
 		{
 			PrintGuide(guides);
 		}
-		else if (com == 5)
+		else if (com == 6)
 		{
 			cout << "Enter which type of trip you want to held(Mountaineering, Kayaking,Hike,Diving)\n";
 			string var;
@@ -230,11 +311,17 @@ int main() {
 				cout << "Wrong type, please try again\n";
 			}
 		}
-		else if (com == 6)
+		else if (com == 7)
 		{
 			new_group.PrintGroup();
 		}
-		else
+		else if (com == 8)
+		{
+		    cout << "Enter name of person you want to change\n";
+		    FullName to_find;
+			cin >> to_find.name >> to_find.surname >> to_find.patronymic;
+		    Changebyname(all, to_find);
+        }else
 		{
 			cout << "Wrong data please try again\n";
 		}

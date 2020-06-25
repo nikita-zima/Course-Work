@@ -156,7 +156,7 @@ public:
 	{
 		for (const auto& i : length_of_path)
 		{
-			cout << i.first << " kength of our hike path is " << i.second << " meters" << endl;
+			cout << i.first << " length of our hike path is " << i.second << " meters" << endl;
 		}
 	}
 private:
